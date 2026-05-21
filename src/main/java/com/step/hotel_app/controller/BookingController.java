@@ -1,9 +1,12 @@
 package com.step.hotel_app.controller;
 
 import com.step.hotel_app.models.Hotel;
+import com.step.hotel_app.repository.HotelRepository;
 import com.step.hotel_app.service.BookingService;
 import com.step.hotel_app.views.BookingRequest;
 import com.step.hotel_app.views.HotelBookingView;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,0 +1,42 @@
+services:
+  hotel-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      MONGO_URL: mongodb://mongo:27017/hotel-app
+
+    depends_on:
+      - mongo
+
+    expose:
+      - "3000"
+
+    deploy:
+      replicas: 2
+
+  nginx:
+    image: nginx:latest
+
+    ports:
+      - "3000:80"
+
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+    depends_on:
+      - hotel-app
+
+  mongo:
+    image: mongo:latest
+    container_name: hotel-app-mongodb
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo_data:/data/db
+      - ./init_hotels.sh:/docker-entrypoint-initdb.d/init_hotels.sh:ro
+
+volumes:
+  mongo_data:
