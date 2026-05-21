@@ -2,8 +2,7 @@ package com.step.hotel_app.service;
 
 import com.step.hotel_app.models.AppUser;
 import com.step.hotel_app.repository.UserRepository;
-import com.step.hotel_app.views.UserRegistrationReq;
-import org.springframework.security.core.userdetails.User;
+import com.step.hotel_app.views.UserReq;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,12 +17,11 @@ public class AppUserDetailService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String username,String password) throws UsernameNotFoundException {
+        return userRepository.findAppUserByUsernameAndPassword(username,password);
     }
 
-    public boolean register(UserRegistrationReq user){
+    public boolean register(UserReq user){
         AppUser newUser = new AppUser(user.username(), user.password());
         try{
             userRepository.save(newUser);
@@ -32,5 +30,10 @@ public class AppUserDetailService implements UserDetailsService {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
 }
