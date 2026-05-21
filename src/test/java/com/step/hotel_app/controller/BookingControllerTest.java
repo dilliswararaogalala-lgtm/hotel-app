@@ -2,13 +2,15 @@ package com.step.hotel_app.controller;
 
 import com.step.hotel_app.models.HotelBooking;
 import com.step.hotel_app.repository.BookingRepository;
-import com.step.hotel_app.views.HotelBookedView;
+import com.step.hotel_app.views.HotelBookingView;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.AutoConfigureDataMongo;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.client.RestTestClient;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,8 +28,16 @@ class BookingControllerTest {
     @Test
     void shouldBookAHotel() {
         HotelBooking hotelBooking = new HotelBooking("12234", "1", 1);
-        HotelBookedView responseBody = client.post().uri("/api/bookings").body(hotelBooking).exchange().expectStatus().isOk().expectBody(HotelBookedView.class).returnResult().getResponseBody();
+        HotelBookingView responseBody = client.post().uri("/api/bookings").body(hotelBooking).exchange().expectStatus().isOk().expectBody(HotelBookingView.class).returnResult().getResponseBody();
 
         assertNotNull(repository.findById(responseBody.bookingId()));
+    }
+
+    @Test
+    void getBookings() {
+        repository.save(new HotelBooking("12234", "1", 1));
+        List responseBody = client.get().uri("/api/bookings").exchange().expectStatus().isOk().expectBody(List.class).returnResult().getResponseBody();
+
+        assertEquals(responseBody.size(), 1);
     }
 }
