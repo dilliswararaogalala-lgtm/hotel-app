@@ -13,6 +13,6 @@ public interface HotelRepository extends MongoRepository<Hotel, String> {
     List<Hotel> findHotelByCityName(String cityName);
 
     @Query("{'_id':  ?0}")
-    @Update("{'rooms':  ?1}")
+    @Update("{$set:{'rooms':  ?1}}")
     void updateRooms(String hotelId, int rooms);
 }

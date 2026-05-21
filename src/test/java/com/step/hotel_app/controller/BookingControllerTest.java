@@ -4,6 +4,7 @@ import com.step.hotel_app.models.Hotel;
 import com.step.hotel_app.models.HotelBooking;
 import com.step.hotel_app.repository.BookingRepository;
 import com.step.hotel_app.repository.HotelRepository;
+import com.step.hotel_app.views.BookingRequest;
 import com.step.hotel_app.views.HotelBookingView;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,9 @@ class BookingControllerTest {
 
     @Test
     void shouldBookAHotel() {
-        Hotel hotel = hotelRepository.insert(new Hotel("Hotel Taj", "Delhi", 50));
-        HotelBooking hotelBooking = new HotelBooking("12234", hotel.getId(), 1);
+        Hotel hotel = hotelRepository.save(new Hotel("Hotel Taj", "Delhi", 50));
+
+        BookingRequest hotelBooking = new BookingRequest(hotel.getId(), 1);
         HotelBookingView responseBody = client.post().uri("/api/bookings").body(hotelBooking).exchange().expectStatus().isOk().expectBody(HotelBookingView.class).returnResult().getResponseBody();
 
         assertNotNull(bookingRepository.findById(Objects.requireNonNull(responseBody).bookingId()));
