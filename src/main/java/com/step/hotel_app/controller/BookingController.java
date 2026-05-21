@@ -1,12 +1,9 @@
 package com.step.hotel_app.controller;
-
-import com.step.hotel_app.models.Hotel;
-import com.step.hotel_app.repository.HotelRepository;
+import com.step.hotel_app.models.AppUser;
 import com.step.hotel_app.service.BookingService;
 import com.step.hotel_app.views.BookingRequest;
 import com.step.hotel_app.views.HotelBookingView;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +19,14 @@ public class BookingController {
     }
 
     @PostMapping
-    public HotelBookingView bookHotel(@RequestBody BookingRequest bookingRequest) {
-        String userId = "12234";
+    public HotelBookingView bookHotel(@RequestBody BookingRequest bookingRequest, @AuthenticationPrincipal AppUser userDetails) {
+        String userId = userDetails.getId();
         return bookingService.bookHotel(userId, bookingRequest.hotelId(), bookingRequest.rooms());
     }
 
     @GetMapping
-    public List<HotelBookingView> getBookings() {
-        return bookingService.getBookings();
+    public List<HotelBookingView> getBookings(@AuthenticationPrincipal AppUser userDetails) {
+        String userId = userDetails.getId();
+        return bookingService.getBookings(userId);
     }
 }

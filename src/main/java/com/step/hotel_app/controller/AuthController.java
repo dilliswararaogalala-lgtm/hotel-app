@@ -39,6 +39,7 @@ public class AuthController {
             String username = userDetails.getUsername();
             String token = jwtService.generateTokens(username);
             return ResponseEntity.ok(new JWTTokenView(token));
+
         } catch (Throwable e) {
             System.out.println(e.getMessage());
             return  ResponseEntity.notFound().build();
