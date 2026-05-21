@@ -9,9 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Hotel {
     @Id
     private String id;
-    private  String hotelName;
-    private  String cityName;
-    private  Integer rooms;
+    private String hotelName;
+    private String cityName;
+    private Integer rooms;
 
     public Hotel(String hotelName, String cityName, Integer rooms) {
         this.hotelName = hotelName;
